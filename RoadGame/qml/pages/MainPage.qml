@@ -37,6 +37,7 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import src 1.0
 
 Page {
     objectName: "mainPage"
@@ -59,21 +60,46 @@ Page {
                 color: "Green"
                 anchors.fill: parent
                 anchors.margins: 30
-
+                Image {
+                    id: d
+                    source: "textures/obst_house.jpg"
+                    scale: 10
+                }
                 Canvas {
                     id: canvas_test
                     anchors.fill: parent
+                    property int cordX: 0
+                    property int cordY: 0
+
+                    GScene{
+
+                    }
 
                     MouseArea{
                         id: ct_area
                         anchors.fill: parent
-
-                        onPressed: {debug_3.color = "Pink"}
-                        onReleased: {debug_3.color = "Green"}
+                        onPressed: {
+                            canvas_test.cordX = mouseX
+                            canvas_test.cordY = mouseY
+                        }
+                        onPositionChanged: {
+                            canvas_test.requestPaint()
+                        }
                     }
-                }
+
+                    onPaint: {
+                        var ctx = getContext('2d')
+                        ctx.lineWidth = 25
+                        ctx.beginPath()
+                        ctx.moveTo(cordX, cordY)
+                        cordX  = ct_area.mouseX
+                        cordY = ct_area.mouseY
+                        ctx.lineTo(cordX, cordY)
+                        ctx.stroke()
+                    }
             }
         }
+    }
     }
 
     Item {

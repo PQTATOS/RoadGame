@@ -38,8 +38,11 @@
 #include <auroraapp.h>
 #include <QtQuick>
 
+#include "gamescene.h"
+
 int main(int argc, char *argv[])
 {
+    qmlRegisterType<GameScene>("src", 1, 0, "GScene");
     QScopedPointer<QGuiApplication> application(Aurora::Application::application(argc, argv));
     application->setOrganizationName(QStringLiteral("ru.auroraos"));
     application->setApplicationName(QStringLiteral("RoadGame"));
