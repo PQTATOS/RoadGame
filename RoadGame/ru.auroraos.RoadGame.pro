@@ -43,9 +43,21 @@ CONFIG += \
 PKGCONFIG += \
 
 SOURCES += \
+    src/baseobject.cpp \
+    src/boxcolider.cpp \
+    src/game.cpp \
+    src/gamescene.cpp \
     src/main.cpp \
+    src/node.cpp \
+    src/tile.cpp
 
 HEADERS += \
+    src/baseobject.h \
+    src/boxcolider.h \
+    src/game.h \
+    src/gamescene.h \
+    src/node.h \
+    src/tile.h
 
 DISTFILES += \
     rpm/ru.auroraos.RoadGame.spec \
@@ -54,6 +66,7 @@ DISTFILES += \
     CONTRIBUTING.md \
     LICENSE.BSD-3-CLAUSE.md \
     README.md \
+    textures/obst_house.jpg
 
 AURORAAPP_ICONS = 86x86 108x108 128x128 172x172
 
