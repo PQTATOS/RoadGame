@@ -44,7 +44,7 @@ Page {
     allowedOrientations: Orientation.All
 
     Item {
-        id: playableArea
+        id: mainArea
         width: parent.width
         anchors.top: parent.top
         anchors.bottom: controllsArea.top
@@ -52,54 +52,39 @@ Page {
         Rectangle{
             id: debug_1
             anchors.fill: parent
+            color: "Gray"
 
-            color: "Red"
-
-            Rectangle {
-                id: debug_3
-                color: "Green"
+           Rectangle {
+                id: playableArea
                 anchors.fill: parent
                 anchors.margins: 30
-                Image {
-                    id: d
-                    source: "textures/obst_house.jpg"
-                    scale: 10
-                }
-                Canvas {
-                    id: canvas_test
-                    anchors.fill: parent
-                    property int cordX: 0
-                    property int cordY: 0
+                color: "red"
+                 GScene{
+                     id: scene
+                     anchors.fill: parent
 
-                    GScene{
+                     Component.onCompleted: {
+                         console.debug("succ");
+                         loadGame();
+                         loadLevel(1);
+                     }
+                 }
 
-                    }
-
-                    MouseArea{
-                        id: ct_area
-                        anchors.fill: parent
-                        onPressed: {
-                            canvas_test.cordX = mouseX
-                            canvas_test.cordY = mouseY
-                        }
-                        onPositionChanged: {
-                            canvas_test.requestPaint()
-                        }
-                    }
-
-                    onPaint: {
-                        var ctx = getContext('2d')
-                        ctx.lineWidth = 25
-                        ctx.beginPath()
-                        ctx.moveTo(cordX, cordY)
-                        cordX  = ct_area.mouseX
-                        cordY = ct_area.mouseY
-                        ctx.lineTo(cordX, cordY)
-                        ctx.stroke()
-                    }
+                 MouseArea {
+                     id: ct_area
+                     anchors.fill: parent
+                     onPressed:{
+                         scene.addPathPoint(mouseX, mouseY);
+                     }
+                     onReleased: {
+                         scene.endPathPoint();
+                     }
+                     onPositionChanged:{
+                         scene.addPathPoint(mouseX, mouseY);
+                     }
+                 }
             }
         }
-    }
     }
 
     Item {
