@@ -69,6 +69,21 @@ Page {
                          loadLevel(1);
                      }
                  }
+                 Timer {
+                     id: render_timer
+                     interval: 32
+                     running: true
+                     repeat: true
+                     onTriggered: {
+                         scene.requestPaint() }
+                 }
+                 Timer {
+                     id: sim_timer
+                     interval: 16
+                     running: true
+                     repeat: true
+                     onTriggered: { }
+                 }
 
                  MouseArea {
                      id: ct_area

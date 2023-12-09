@@ -19,8 +19,8 @@ std::vector<Tile*>* Game::getLevel()
 
 void Game::addPath(int x, int y)
 {
-    //Node* node = _pathChecker->addNode(x,y,0);
-    if (_pathChecker->checkCollision(x,y,0))
+    Node* node = _pathChecker->addNode(x,y,0);
+    if (node == nullptr)
     {
         _isPathContinues = false;
         return;
