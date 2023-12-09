@@ -1,23 +1,27 @@
 #ifndef TILE_H
 #define TILE_H
 
-#include <QImage>
+#include <string>
+#include <QColor>
 
-enum class TileType
+enum class TileType : int
 {
     Empty,
     Obstacle,
-    River
+    River,
+    Entrance,
+    Exit
 };
 
 class Tile
 {
 public:
-    Tile();
-    bool isObstacle();
+    Tile(char type, std::string path);
+    TileType getType() { return _type; }
+    QColor getColor() { return _pathToTexture; }
 private:
-    TileType m_type;
-    QImage m_texture;
+    TileType _type;
+    QColor _pathToTexture;
 };
 
 #endif // TILE_H

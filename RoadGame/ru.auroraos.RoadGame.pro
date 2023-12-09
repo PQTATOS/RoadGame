@@ -43,20 +43,24 @@ CONFIG += \
 PKGCONFIG += \
 
 SOURCES += \
-    src/baseobject.cpp \
-    src/boxcolider.cpp \
+    src/drawer.cpp \
     src/game.cpp \
     src/gamescene.cpp \
+    src/level.cpp \
     src/main.cpp \
     src/node.cpp \
+    src/path.cpp \
+    src/pathcollisionchecker.cpp \
     src/tile.cpp
 
 HEADERS += \
-    src/baseobject.h \
-    src/boxcolider.h \
+    src/drawer.h \
     src/game.h \
     src/gamescene.h \
+    src/level.h \
     src/node.h \
+    src/path.h \
+    src/pathcollisionchecker.h \
     src/tile.h
 
 DISTFILES += \
@@ -66,6 +70,7 @@ DISTFILES += \
     CONTRIBUTING.md \
     LICENSE.BSD-3-CLAUSE.md \
     README.md \
+    src/maps/map_1.txt \
     textures/obst_house.jpg
 
 AURORAAPP_ICONS = 86x86 108x108 128x128 172x172
