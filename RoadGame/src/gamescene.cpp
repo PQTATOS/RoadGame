@@ -34,7 +34,6 @@ void GameScene::paint(QPainter *painter)
 void GameScene::addPathPoint(int x, int y)
 {
     _game->addPath(x , y);
-    update();
 }
 
 void GameScene::endPathPoint()
