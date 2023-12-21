@@ -4,7 +4,7 @@
 #include <QPainterPath>
 
 #include "level.h"
-#include "pathcollisionchecker.h"
+#include "pathhandler.h"
 
 class Game
 {
@@ -18,21 +18,18 @@ public:
     size_t getRowCount() { return _tileRowCount; }
     size_t getTileSize() { return _tileSize; }
 
-    //delete
-    QPainterPath* getPath() { return &tmp_path; }
-    //delete
+    std::unordered_set<Node*>* getPathBegins() { return _paths->getPathBegins(); }
+
     void addPath(int x, int y);
-    void endPath();
+    void startAddingPath();
+    void stopAddingPath();
 private:
-    PathCollisionChecker* _pathChecker;
+    PathHandler* _paths;
 
     size_t _tileColumCount = 11;
     size_t _tileRowCount = 17;
     size_t _tileSize = 60;
 
-    //delete
-    QPainterPath tmp_path;
-    //delete
     bool _isPathContinues = false;
     int _prevX;
     int _prevY;

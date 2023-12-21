@@ -49,7 +49,7 @@ SOURCES += \
     src/level.cpp \
     src/main.cpp \
     src/node.cpp \
-    src/pathcollisionchecker.cpp \
+    src/pathhandler.cpp \
     src/tile.cpp
 
 HEADERS += \
@@ -58,7 +58,7 @@ HEADERS += \
     src/gamescene.h \
     src/level.h \
     src/node.h \
-    src/pathcollisionchecker.h \
+    src/pathhandler.h \
     src/tile.h
 
 DISTFILES += \

@@ -11,17 +11,6 @@ Level::Level()
 
 bool Level::LoadMap(int num)
 {
-    QFile file ("./qml/pages/gameFiles/maps/map_1.txt");
-
-    QString errMsg;
-    QFileDevice::FileError err = QFileDevice::NoError;
-    if (!file.open(QIODevice::ReadOnly)) {
-        errMsg = file.errorString();
-        err = file.error();
-    }
-
-    qDebug() << errMsg << " " << file.fileName();
-
     std::string deb_file = "###EX######"
                            "###########"
                            "###########"
@@ -41,6 +30,8 @@ bool Level::LoadMap(int num)
                            "###########";
     for (int i = 0; i < deb_file.size(); ++i)
         _currentMap.push_back(new Tile(deb_file[i], ""));
+
+    qDebug() << "Map loaded";
 
     return true;
 }

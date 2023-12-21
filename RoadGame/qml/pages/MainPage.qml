@@ -62,9 +62,10 @@ Page {
                  GScene{
                      id: scene
                      anchors.fill: parent
+                     width: parent.width
+                     height: parent.height
 
                      Component.onCompleted: {
-                         console.debug("succ");
                          loadGame();
                          loadLevel(1);
                      }
@@ -88,12 +89,16 @@ Page {
                  MouseArea {
                      id: ct_area
                      anchors.fill: parent
+
                      onPressed:{
+                         scene.startAddingPath();
                          scene.addPathPoint(mouseX, mouseY);
                      }
                      onReleased: {
-                         scene.endPathPoint();
+                         console.debug("stoped")
+                         scene.stopAddingPath()
                      }
+
                      onPositionChanged:{
                          scene.addPathPoint(mouseX, mouseY);
                      }

@@ -1,14 +1,17 @@
 #include "game.h"
 
+#include <QDebug>
+
 Game::Game()
 {
     _currentLevel = new Level();
-    _pathChecker = new PathCollisionChecker(_tileRowCount, _tileColumCount, _tileSize, _currentLevel->getMap());
+    _paths = new PathHandler(_tileRowCount, _tileColumCount, _tileSize, &_isPathContinues);
 }
 
 bool Game::loadLevel(int level)
 {
     _currentLevel->LoadMap(level);
+    _paths->loadNewTileMap(_currentLevel->getMap());
     return true;
 }
 
@@ -19,24 +22,16 @@ std::vector<Tile*>* Game::getLevel()
 
 void Game::addPath(int x, int y)
 {
-    Node* node = _pathChecker->addNode(x,y,0);
-    if (node == nullptr)
-    {
-        _isPathContinues = false;
-        return;
-    }
-    if (_isPathContinues)
-    {
-        tmp_path.moveTo(_prevX, _prevY);
-        tmp_path.lineTo(x,y);
-    }
-    _prevX = x;
-    _prevY = y;
+    _paths->addNode(x,y,0);
+}
+
+void Game::startAddingPath()
+{
     _isPathContinues = true;
 }
 
-void Game::endPath()
+void Game::stopAddingPath()
 {
-    _isPathContinues = false;
+    _paths->stopAdding();
 }
 
