@@ -36,6 +36,7 @@
 *******************************************************************************/
 
 import QtQuick 2.0
+import QtPositioning 5.3
 import Sailfish.Silica 1.0
 import src 1.0
 
@@ -58,7 +59,7 @@ Page {
                 id: playableArea
                 anchors.fill: parent
                 anchors.margins: 30
-                color: "red"
+                color: "black"
                  GScene{
                      id: scene
                      anchors.fill: parent
@@ -70,13 +71,14 @@ Page {
                          loadLevel(1);
                      }
                  }
-                 Timer {
+                Timer {
                      id: render_timer
                      interval: 32
                      running: true
                      repeat: true
                      onTriggered: {
-                         scene.requestPaint() }
+                          scene.requestPaint()
+                     }
                  }
                  Timer {
                      id: sim_timer
@@ -116,8 +118,111 @@ Page {
         Rectangle{
             id: debug_2
             anchors.fill: parent
+            width: parent.width
+            height: parent.height
 
-            color: "Blue"
+            color: "black"
+            border.color: "yellow"
+            border.width: 4
+
+            Row {
+                anchors.fill: parent
+                anchors.margins: 17
+                width: parent.width
+                height: parent.height
+
+                spacing: 30
+
+                Button{
+                    id: menuBtn
+                    width: 150
+                    height: 150
+                    icon.source: "qrc:/src/img/menu_btn.png"
+                    icon.color: "white"
+                    icon.width: 150
+                    icon.height: 150
+                    icon.cache: true
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    onClicked: {
+                        mapBtn.visible = !mapBtn.visible
+                        clearBtn.visible = !clearBtn.visible
+                        simBtn.visible = !simBtn.visible
+                        downBtn.visible = !downBtn.visible
+                        upBtn.visible = !upBtn.visible
+
+                    }
+                }
+                Button{
+                    id: mapBtn
+                    width: 150
+                    height: 150
+                    icon.source: "qrc:/src/img/map_btn.png"
+                    icon.color: "white"
+                    icon.width: 150
+                    icon.height: 150
+                    icon.cache: true
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: false
+
+                    onClicked: {pageStack.replace(Qt.resolvedUrl("LevelSelectPage.qml"))}
+                }
+                Button{
+                    id: clearBtn
+                    width: 150
+                    height: 150
+                    icon.source: "qrc:/src/img/clear_btn.png"
+                    icon.color: "white"
+                    icon.width: 150
+                    icon.height: 150
+                    icon.cache: true
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: false
+
+                    onClicked: {scene.restartLevel()}
+                }
+                Button{
+                    id: simBtn
+                    width: 150
+                    height: 150
+                    icon.source: "qrc:/src/img/sim_btn.png"
+                    icon.color: "white"
+                    icon.width: 150
+                    icon.height: 150
+                    icon.cache: true
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    onClicked: {console.debug("Sim button")}
+                }
+
+                Button{
+                    id: downBtn
+                    width: 150
+                    height: 150
+                    icon.source: "qrc:/src/img/down_btn.png"
+                    icon.color: "white"
+                    icon.width: 150
+                    icon.height: 150
+                    icon.cache: true
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    onClicked: {console.debug("down button")}
+                }
+                Button{
+                    id: upBtn
+                    width: 150
+                    height: 150
+                    icon.source: "qrc:/src/img/up_btn.png"
+                    icon.color: "white"
+                    icon.width: 150
+                    icon.height: 150
+                    icon.cache: true
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    onClicked: {console.debug("Up button")}
+                }
+            }
         }
     }
 }
+

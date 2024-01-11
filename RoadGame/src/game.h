@@ -2,8 +2,8 @@
 #define GAME_H
 
 #include <QPainterPath>
+#include <unordered_map>
 
-#include "level.h"
 #include "pathhandler.h"
 
 class Game
@@ -11,7 +11,8 @@ class Game
 public:
     Game();
 
-    bool loadLevel(int level);
+    void loadLevel(int level);
+    void restartLevel();
     std::vector<Tile*>* getLevel();
 
     size_t getColumCount() { return _tileColumCount;}
@@ -25,6 +26,9 @@ public:
     void stopAddingPath();
 private:
     PathHandler* _paths;
+    std::unordered_map<int,Node*> _roadBegins;
+    std::unordered_map<int,Node*> _roadEnds;
+    std::unordered_map<int, std::vector<std::pair<int,int>>> _signs;
 
     size_t _tileColumCount = 11;
     size_t _tileRowCount = 17;
@@ -34,7 +38,7 @@ private:
     int _prevX;
     int _prevY;
 
-    Level* _currentLevel;
+    std::vector<Tile*> _levelMap;
 };
 
 #endif // GAME_H

@@ -13,11 +13,12 @@ enum class NodeType : int
 class Node
 {
 public:
-    Node(int x, int y, int h, char colorTag, NodeType type = NodeType::Path);
+    Node(int x, int y, int h, NodeType type = NodeType::Path);
 
     int getX() { return _x; }
     int getY() { return _y; }
     int getHeight() { return _h; }
+    NodeType getType() { return _type; }
 
     void addNext(Node* next);
     std::vector<Node*>* getNexts();
@@ -30,7 +31,6 @@ private:
     std::vector<Node*> _prevNodes;
 
     NodeType _type;
-    char _colorTag;
 
     int _x;
     int _y;

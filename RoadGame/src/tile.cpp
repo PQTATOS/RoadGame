@@ -1,12 +1,12 @@
 #include "tile.h"
+#include <QDebug>
 
-Tile::Tile(char type, std::string path)
+Tile::Tile(int x, int y, char type, std::string path)
 {
+    _x = x;
+    _y = y;
+    qDebug() << "Tile check";
     switch (type) {
-    case '#':
-        _type = TileType::Empty;
-        _pathToTexture = QColor("black");
-        break;
     case 'R':
         _type = TileType::River;
         _pathToTexture = QColor("blue");
@@ -15,13 +15,18 @@ Tile::Tile(char type, std::string path)
         _type = TileType::Obstacle;
         _pathToTexture = QColor("yellow");
         break;
-    case 'E':
-        _type = TileType::Entrance;
-        _pathToTexture = QColor("green");
+    case 'S':
+        _type = TileType::Sign;
+        _pathToTexture = QColor("pink");
         break;
-    case 'X':
-        _type = TileType::Exit;
-        _pathToTexture = QColor("red");
+    case 'T':
+        _type = TileType::Empty;
+        _pathToTexture = QColor("White");
         break;
     }
+}
+
+SignTile::SignTile(int id, int x, int y, char type, std::string path) : Tile(x, y, type, path)
+{
+    _roadId = id;
 }

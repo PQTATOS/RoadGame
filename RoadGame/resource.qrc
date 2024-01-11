@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>src/levels/lv1.txt</file>
+        <file>src/img/menu_btn.png</file>
+        <file>src/img/clear_btn.png</file>
+        <file>src/img/down_btn.png</file>
+        <file>src/img/map_btn.png</file>
+        <file>src/img/up_btn.png</file>
+        <file>src/img/sim_btn.png</file>
+    </qresource>
+</RCC>

@@ -12,33 +12,22 @@ PathHandler::PathHandler(size_t rows, size_t columns, size_t tileSize, bool* ptr
 
     _prevNode = nullptr;
 
+    _emptyTile = new Tile(0, 0 ,'T', "white");
+
     _nodeContainer.resize(_rows * _columns);
+    _tileMap.resize(_rows * _columns, _emptyTile);
+
 }
 
 void PathHandler::loadNewTileMap(std::vector<Tile *> *map)
 {
-    _tileMap = map;
-
-    for (size_t x = 0; x < _columns; ++x)
-    {
-        for (size_t y = 0; y < _rows; ++y)
-        {
-            if ((*_tileMap)[y*_columns + x]->getType() == TileType::Entrance)
-            {
-                _nodeContainer[y*_columns + x].push_back(new Node(x*_tileSize+30, y*_tileSize+30, 0, 'r', NodeType::Entrance));
-                _pathBegins.insert(_nodeContainer[y*_columns + x].back());
-            }
-            else if ((*_tileMap)[y*_columns + x]->getType() == TileType::Exit)
-            {
-                _nodeContainer[y*_columns + x].push_back(new Node(x*_tileSize+_tileSize/2, y*_tileSize+_tileSize/2, 0, 'r', NodeType::Exit));
-                _pathBegins.insert(_nodeContainer[y*_columns + x].back());
-            }
-        }
-    }
+    for (auto t : *map)
+        _tileMap[t->getY()*_columns + t->getX()] = t;
 }
 
-void PathHandler::addNode(int x, int y, int h)
+void PathHandler::addNodeNew(int x, int y, int h)
 {
+    qDebug() << "start adding node ";
     if (!*_isPathContinues)
         return;
 
@@ -51,55 +40,66 @@ void PathHandler::addNode(int x, int y, int h)
         return;
     }
 
+    qDebug() << "Get adj nodes";
     std::vector<Node*> nodes;
     getAdjsntNodes(x, y, nodes);
 
-    qDebug() << nodes.size();
-    if (_prevNode != nullptr)
+    qDebug() << "Get crating node";
+    //если вокруг нет точек, то создаем новое начало пути
+    if (nodes.size() == 0 && _prevNode == nullptr)
     {
-        int dist = getDist(x, y, _prevNode);
-        qDebug() << "dist " <<  dist;
-        if (dist > 45)
-        {
-            qDebug() << "adde";
-
-            Node* node = new Node(x,y, h, 'r');
-            node->addPrev(_prevNode);
-            _nodeContainer[nY*_columns + nX].push_back(node);
-            _prevNode->addNext(node);
-            _prevNode = node;
-        }
-    }
-
-    if (nodes.size() == 0)
-    {
-        _nodeContainer[nY*_columns + nX].push_back(new Node(x, y, h, 'r'));
+        _nodeContainer[nY*_columns + nX].push_back(new Node(x, y, h));
         _pathBegins.insert(_nodeContainer[nY*_columns + nX].back());
-        qDebug() << "new path begin added";
         _prevNode = _nodeContainer[nY*_columns + nX].back();
         return;
     }
 
+    qDebug() << "Connecting adj nodes";
+    //проверяем соседнии точки
+    bool isConnected = false;
+    Node* nodeToConnect;
     for (auto node : nodes)
     {
         if (node == _prevNode)
             continue;
         int dist = getDist(x, y, node);
-        if (dist < 60)
+        if (dist < 45)
         {
-            if (_prevNode == nullptr)
-            {
-                Node* next = new Node(x,y,h,'r');
-                node->addNext(next);
-                _prevNode = next;
-                break;
-            }
-
-            node->addPrev(_prevNode);
-            _prevNode->addNext(node);
-            break;
+            isConnected = true;
+            nodeToConnect = node;
         }
     }
+
+    qDebug() << "Connect prev node";
+    //соединяем с предыдущей точкой, если она есть, на растоянии 45 пикселей
+    if (_prevNode == nullptr)
+    {
+        _prevNode = nodeToConnect;
+        *_isPathContinues=true;
+        return;
+    }
+    if (_prevNode != nullptr)
+    {
+        if (isConnected)
+        {
+            _prevNode->addNext(nodeToConnect);
+            nodeToConnect->addPrev(_prevNode);
+            *_isPathContinues = false;
+            _prevNode = nullptr;
+            return;
+        }
+        else if (getDist(x, y, _prevNode) > 45)
+        {
+            Node* node = new Node(x,y, h);
+            node->addPrev(_prevNode);
+            _nodeContainer[nY*_columns + nX].push_back(node);
+            ++nodeCount;
+            _prevNode->addNext(node);
+            _prevNode = node;
+            return;
+        }
+    }
+    qDebug() << "No node added";
 }
 
 void PathHandler::getAdjsntNodes(int x, int y, std::vector<Node*> &nodes)
@@ -114,8 +114,9 @@ void PathHandler::getAdjsntNodes(int x, int y, std::vector<Node*> &nodes)
         for (auto tile : _nodeContainer[(nY+cords.second)*_columns + (nX+cords.first)])
         {
             int dist = getDist(x, y, tile);
-            qDebug() << "near dist " << dist;
-            if (dist <= 90)
+            if(tile->getType() == NodeType::Entrance || tile->getType() == NodeType::Exit)
+                qDebug() << "EX node " << dist;
+            if (dist <= 60)
             {
                 nodes.push_back(tile);
             }
@@ -138,12 +139,67 @@ int PathHandler::getDist(int x, int y, Node *node)
 
 bool PathHandler::checkCollision(int x, int y, int h)
 {
-    TileType tType = (*_tileMap)[y*_columns + x]->getType();
+    Tile* tType = _tileMap[y*_columns + x];
 
-    if (tType == TileType::Obstacle)
+    if (tType->getType() == TileType::Obstacle)
         return true;
-    if (tType == TileType::River && h < 1)
+    if (tType->getType() == TileType::Sign)
+        return true;
+    if (tType->getType() == TileType::River && h < 1)
         return true;
 
     return false;
+}
+
+void PathHandler::addLevelNode(Node * node)
+{
+    _nodeContainer[(node->getY()/_tileSize)*_columns +
+            (node->getX()/_tileSize)].push_back(node);
+    _levelNodes.insert(node);
+    qDebug() << "Base node added";
+
+    if (node->getType() == NodeType::Entrance)
+    {
+        _nodeContainer[(node->getY()/_tileSize)*_columns +
+                (node->getX()/_tileSize)].push_back(node->getNexts()->at(0));
+        qDebug() << "sub node added";
+        _levelNodes.insert(node->getNexts()->at(0));
+        _pathBegins.insert(node);
+    }
+    else
+    {
+        _nodeContainer[(node->getY()/_tileSize)*_columns +
+                (node->getX()/_tileSize)].push_back(node->getPrevs()->at(0));
+        qDebug() << "sub node added";
+        _levelNodes.insert(node->getPrevs()->at(0));
+        _pathBegins.insert(node->getPrevs()->at(0));
+    }
+}
+
+void PathHandler::restartLevel()
+{
+    for(auto begin : _pathBegins)
+    {
+        if (!_levelNodes.count(begin))
+            continue;
+        _pathBegins.erase(begin);
+        qDebug() << "b node delete";
+    }
+    for (size_t i = 0; i < _nodeContainer.size(); ++i)
+    {
+        std::vector<Node*> vec;
+        for (auto node : _nodeContainer[i])
+        {
+            if(!_levelNodes.count(node))
+            {
+                vec.push_back(node);
+                continue;
+            }
+            delete node;
+            qDebug() << "node delete";
+        }
+        _nodeContainer[i] = vec;
+        qDebug() << "vec added";
+    }
+
 }

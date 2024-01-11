@@ -2,12 +2,11 @@
 
 #include <QDebug>
 
-Node::Node(int x, int y, int h, char colorTag, NodeType type)
+Node::Node(int x, int y, int h, NodeType type)
 {
     _x = x;
     _y = y;
     _h = h;
-    _colorTag = colorTag;
     _type = type;
 }
 

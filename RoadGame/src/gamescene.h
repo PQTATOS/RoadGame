@@ -25,15 +25,13 @@ public:
     Q_INVOKABLE void startAddingPath();
     Q_INVOKABLE void stopAddingPath();
 
+    Q_INVOKABLE void restartLevel();
+
     void paint(QPainter *painter);
 private:
     Game* _game;
     int _areaWidth;
     int _areaHeight;
-
-    QBrush _brush;
-    QPen _pen;
-    QColor _color;
 };
 
 #endif // GAMESCENE_H
