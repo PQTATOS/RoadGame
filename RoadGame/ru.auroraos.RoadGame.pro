@@ -43,31 +43,33 @@ CONFIG += \
 PKGCONFIG += \
 
 SOURCES += \
+    src/car.cpp \
     src/drawer.cpp \
     src/game.cpp \
     src/gamescene.cpp \
-    src/level.cpp \
     src/main.cpp \
     src/node.cpp \
-    src/pathcollisionchecker.cpp \
+    src/pathhandler.cpp \
     src/tile.cpp
 
 HEADERS += \
+    src/car.h \
     src/drawer.h \
     src/game.h \
     src/gamescene.h \
-    src/level.h \
     src/node.h \
-    src/pathcollisionchecker.h \
+    src/pathhandler.h \
     src/tile.h
 
 DISTFILES += \
+    qml/pages/LevelSelectPage.qml \
     rpm/ru.auroraos.RoadGame.spec \
     AUTHORS.md \
     CODE_OF_CONDUCT.md \
     CONTRIBUTING.md \
     LICENSE.BSD-3-CLAUSE.md \
     README.md \
+    src/img/sim_btn.png \
     src/maps/map_1.txt \
     textures/obst_house.jpg
 
@@ -78,3 +80,6 @@ CONFIG += auroraapp_i18n
 TRANSLATIONS += \
     translations/ru.auroraos.RoadGame.ts \
     translations/ru.auroraos.RoadGame-ru.ts \
+
+RESOURCES += \
+    resource.qrc
