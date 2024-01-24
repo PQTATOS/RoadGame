@@ -85,7 +85,9 @@ Page {
                      interval: 16
                      running: true
                      repeat: true
-                     onTriggered: { }
+                     onTriggered: {
+                         scene.requestSimUpdate()
+                     }
                  }
 
                  MouseArea {

@@ -3,6 +3,8 @@
 
 #include <string>
 #include <QColor>
+#include <vector>
+#include <utility>
 
 enum class TileType : int
 {
@@ -33,8 +35,12 @@ class SignTile: public Tile
 {
 public:
     SignTile(int id, int x, int y, char type, std::string path);
+    void addConnection(int to, int demand);
+    size_t getId() { return _roadId; };
+    std::vector<std::pair<int, int>>* getNeeds() { return &_needsConnection; };
 private:
     size_t _roadId;
+    std::vector<std::pair<int, int>> _needsConnection;
 
 };
 

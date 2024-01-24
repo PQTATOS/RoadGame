@@ -18,6 +18,8 @@ void GameScene::paint(QPainter *painter)
     Drawer::drawMap(painter, _game->getTileSize(), _game->getLevel());
 
     Drawer::drawPaths(painter, _game->getPathBegins());
+
+    Drawer::drawCars(painter, _game->getCarList());
 }
 
 void GameScene::addPathPoint(int x, int y)
@@ -52,4 +54,9 @@ void GameScene::loadLevel(int level)
 void GameScene::restartLevel()
 {
     _game->restartLevel();
+}
+
+void GameScene::requestSimUpdate()
+{
+    _game->reqSimUpdate();
 }

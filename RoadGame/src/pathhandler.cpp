@@ -156,21 +156,21 @@ void PathHandler::addLevelNode(Node * node)
     _nodeContainer[(node->getY()/_tileSize)*_columns +
             (node->getX()/_tileSize)].push_back(node);
     _levelNodes.insert(node);
-    qDebug() << "Base node added";
+    qDebug() << "node base " << node;
 
     if (node->getType() == NodeType::Entrance)
     {
         _nodeContainer[(node->getY()/_tileSize)*_columns +
                 (node->getX()/_tileSize)].push_back(node->getNexts()->at(0));
-        qDebug() << "sub node added";
         _levelNodes.insert(node->getNexts()->at(0));
+        qDebug() << "node E " << node->getNexts()->at(0);
         _pathBegins.insert(node);
     }
     else
     {
         _nodeContainer[(node->getY()/_tileSize)*_columns +
                 (node->getX()/_tileSize)].push_back(node->getPrevs()->at(0));
-        qDebug() << "sub node added";
+        qDebug() << "node X " << node->getPrevs()->at(0);
         _levelNodes.insert(node->getPrevs()->at(0));
         _pathBegins.insert(node->getPrevs()->at(0));
     }
@@ -178,28 +178,34 @@ void PathHandler::addLevelNode(Node * node)
 
 void PathHandler::restartLevel()
 {
+    std::unordered_set<Node*> visited;
+    for(auto node : _levelNodes)
+        node->clearNodes(&_levelNodes, &visited);
+    qDebug() << "Clearing";
+    std::vector<Node*> toDel;
     for(auto begin : _pathBegins)
     {
-        if (!_levelNodes.count(begin))
+        if (_levelNodes.count(begin))
             continue;
-        _pathBegins.erase(begin);
-        qDebug() << "b node delete";
+        toDel.push_back(begin);
     }
+
+    for (auto node : toDel)
+        _pathBegins.erase(node);
+
     for (size_t i = 0; i < _nodeContainer.size(); ++i)
     {
         std::vector<Node*> vec;
         for (auto node : _nodeContainer[i])
         {
-            if(!_levelNodes.count(node))
+            if(_levelNodes.count(node))
             {
+                qDebug() << "node level";
                 vec.push_back(node);
                 continue;
             }
             delete node;
-            qDebug() << "node delete";
         }
         _nodeContainer[i] = vec;
-        qDebug() << "vec added";
     }
-
 }

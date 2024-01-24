@@ -7,5 +7,6 @@
         <file>src/img/map_btn.png</file>
         <file>src/img/up_btn.png</file>
         <file>src/img/sim_btn.png</file>
+        <file>src/levels/lv2.txt</file>
     </qresource>
 </RCC>

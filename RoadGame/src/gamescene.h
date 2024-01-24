@@ -15,7 +15,7 @@ public:
     GameScene();
 
     Q_PROPERTY(int width MEMBER _areaWidth);
-    Q_PROPERTY(int height MEMBER _areaHeight)
+    Q_PROPERTY(int height MEMBER _areaHeight);
 
     Q_INVOKABLE void requestPaint();
     Q_INVOKABLE void loadGame();
@@ -26,6 +26,8 @@ public:
     Q_INVOKABLE void stopAddingPath();
 
     Q_INVOKABLE void restartLevel();
+
+    Q_INVOKABLE void requestSimUpdate();
 
     void paint(QPainter *painter);
 private:

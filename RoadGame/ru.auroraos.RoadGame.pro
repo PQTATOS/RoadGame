@@ -43,6 +43,7 @@ CONFIG += \
 PKGCONFIG += \
 
 SOURCES += \
+    src/car.cpp \
     src/drawer.cpp \
     src/game.cpp \
     src/gamescene.cpp \
@@ -52,6 +53,7 @@ SOURCES += \
     src/tile.cpp
 
 HEADERS += \
+    src/car.h \
     src/drawer.h \
     src/game.h \
     src/gamescene.h \

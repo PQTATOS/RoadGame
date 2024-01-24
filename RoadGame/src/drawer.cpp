@@ -9,7 +9,6 @@ Drawer::Drawer()
 
 void Drawer::drawPaths(QPainter *painter, std::unordered_set<Node*>* nodes)
 {
-    qDebug() << "painting paths " << nodes->size();
     QBrush _brushPoint = QBrush(QColor("pink"), Qt::SolidPattern);
     QPen _penPoint = QPen(_brushPoint, 20, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QBrush _brush = QBrush(QColor("red"), Qt::SolidPattern);
@@ -30,7 +29,6 @@ void Drawer::drawPaths(QPainter *painter, std::unordered_set<Node*>* nodes)
 
             painter->setPen(_penPoint);
             painter->drawPoint(cur->getX(), cur->getY());
-            qDebug() << "painting nexts " << cur->getNexts()->size();
             for (auto next : *cur->getNexts())
             {
                 painter->setPen(_penPath);
@@ -52,5 +50,18 @@ void Drawer::drawMap(QPainter *painter, size_t tileSize, std::vector<Tile*>* map
         _brush.setColor(t->getColor());
 
         painter->fillRect(t->getX()*tileSize, t->getY()*tileSize, tileSize, tileSize, _brush);
+    }
+}
+
+void Drawer::drawCars(QPainter *painter, std::unordered_set<Car *> *carList)
+{
+    //qDebug() << "Drawing cars";
+    QBrush _brush = QBrush("cyan", Qt::SolidPattern);
+    for (auto car : *carList)
+    {
+        auto pos = car->getPositin();
+        _brush.setColor(car->getId() == 1 ? "cyan" : "pink");
+
+        painter->fillRect(pos->first, pos->second, 35, 35, _brush);
     }
 }

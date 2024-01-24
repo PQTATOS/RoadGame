@@ -24,9 +24,15 @@ Tile::Tile(int x, int y, char type, std::string path)
         _pathToTexture = QColor("White");
         break;
     }
+     qDebug() << "Tile checked";
 }
 
 SignTile::SignTile(int id, int x, int y, char type, std::string path) : Tile(x, y, type, path)
 {
     _roadId = id;
+}
+
+void SignTile::addConnection(int to, int demand)
+{
+    _needsConnection.push_back(std::make_pair(to, demand));
 }
